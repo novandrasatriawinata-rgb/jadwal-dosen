@@ -63,7 +63,12 @@ class DatabaseSeeder extends Seeder
         Status::updateOrCreate(['user_id' => $dosen3->id], ['status' => 'Konsultasi']);
 
         // Hapus jadwal lama dan isi dengan data baru untuk menghindari duplikasi
+        // Nonaktifkan foreign key checks untuk truncate tabel yang memiliki relasi
+        DB::statement('SET FOREIGN_KEY_CHECKS=0;');
+        DB::table('bookings')->truncate();
         DB::table('jadwals')->truncate();
+        DB::statement('SET FOREIGN_KEY_CHECKS=1;');
+
         Jadwal::insert([
             // Jadwal Dosen 1
             ['user_id' => $dosen1->id, 'hari' => 'Senin', 'jam_mulai' => '08:00', 'jam_selesai' => '10:00', 'ruangan' => 'Lab A', 'kegiatan' => 'Mengajar', 'keterangan' => 'Kelas Basis Data', 'created_at' => now(), 'updated_at' => now()],
